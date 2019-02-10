@@ -21,7 +21,7 @@ const Content = db.define('content', {
 });
 
 // initializes db, defines model association and syncs the db
-const initDB = (force = false) => {
+const initDb = (force = false) => {
   return db.authenticate().then(() => {
     Content.belongsTo(Page);
     Page.hasMany(Content);
@@ -31,61 +31,76 @@ const initDB = (force = false) => {
 
 // initializes, syncs and seed the db
 const seedAndSyncDB = force => {
-  initDB(force)
+  initDb(force)
     .then(() => {
-      const homePage = Page.create({ name: 'Home' });
-      const employeesPage = Page.create({ name: 'Employees' });
-      const contactPages = Page.create({ name: 'Contact' });
-      const homeContent = Promise.all([
+      const homePg = Page.create({ name: 'Home' });
+      const employPg = Page.create({ name: 'Employees' });
+      const contactPg = Page.create({ name: 'Contact' });
+
+      const homeCnt = Promise.all([
         Content.create({ head: 'Welcome Home 1', body: 'xoxoxo' }),
         Content.create({ head: 'Welcome Home 2', body: 'xoxoxo' }),
       ]);
-      const employeesContent = Promise.all([
+      const employCnt = Promise.all([
         Content.create({ head: 'MOE', body: 'CEO' }),
         Content.create({ head: 'LARRY', body: 'CTO' }),
         Content.create({ head: 'CURLY', body: 'COO' }),
       ]);
-      const contactContent = Promise.all([
+      const contactCnt = Promise.all([
         Content.create({ head: 'Phone', body: '212-555-1212' }),
         Content.create({ head: 'Telex', body: '212-555-1213' }),
         Content.create({ head: 'FAX', body: '212-555-1214' }),
       ]);
-      return Promise.all([
-        homePage,
-        employeesPage,
-        contactPages,
-        homeContent,
-        employeesContent,
-        contactContent,
-      ]);
+      return Promise.all([homePg, employPg, contactPg, homeCnt, employCnt, contactCnt]);
     })
-    .then(
-      ([
-        homePage,
-        employeesPage,
-        contactPages,
-        homeContent,
-        employeesContent,
-        contactContent,
-      ]) => {
-        homePage.setContents(homeContent);
-        employeesPage.setContents(employeesContent);
-        contactPages.setContents(contactContent);
-      }
-    )
+    .then(([homePg, employPg, contactPg, homeCnt, employCnt, contactCnt]) => {
+      return Promise.all([
+        homePg.setContents(homeCnt),
+        employPg.setContents(employCnt),
+        contactPg.setContents(contactCnt)
+      ])
+    })
     .then(() => {
       console.log('I have seed the database');
-      process.exit(0);
     })
     .catch(error => {
-      console.log(error);
-      process.exit(1);
+      console.error(error);
     });
 };
 
+
+const getHomePg = () => {
+  return Page.findAll({
+    where: { name: 'Home'}
+  })
+  .then(pages => pages[0]);
+}
+
+const getPageAndContents = (id) => {
+  return Page.findByPk(parseInt(id), {include: [Content]});
+}
+
+const getAllPages = () => {
+  return Page.findAll();
+}
+
+// const getPageContent = (id) => {
+//   return Content.findAll({
+//     where: { pageId: id }
+//   })
+// }
+
+// const getCurrentPg = (id) => {
+//   return Page.findAll({
+//     where: { id: id }
+//   })
+//   .then(pages => pages[0])
+// }
+
 module.exports = {
-  Page,
-  Content,
-  initDB,
-  seedAndSyncDB
+  initDb,
+  seedAndSyncDB,
+  getHomePg,
+  getAllPages,
+  getPageAndContents
 }

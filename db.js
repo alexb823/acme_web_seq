@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-const db = new Sequelize('postgres://localhost/acme_web_sql');
+const db = new Sequelize(process.env.DATABASE_URL);
 
 //define the model for pages
 const Page = db.define('page', {
@@ -83,19 +83,6 @@ const getPageAndContents = (id) => {
 const getAllPages = () => {
   return Page.findAll();
 }
-
-// const getPageContent = (id) => {
-//   return Content.findAll({
-//     where: { pageId: id }
-//   })
-// }
-
-// const getCurrentPg = (id) => {
-//   return Page.findAll({
-//     where: { id: id }
-//   })
-//   .then(pages => pages[0])
-// }
 
 module.exports = {
   initDb,

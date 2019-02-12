@@ -5,15 +5,20 @@ const renderPage = (allPages, currentPgAndCont) => {
     <!DOCTYPE html>
     <html>
       <header>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Acme Web</title>
         <link
           rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.0/css/bootstrap.min.css"
+          integrity="sha384-PDle/QlgIONtM1aqA2Qemk5gPOE7wFq8+Em+G/hmo5Iq0CCmYZLv3fVRDJ4MMwEA"
+          crossorigin="anonymous"
         />
       </header>
       <body>
         <div class="container">
-
-        <!-- Page Header -->
+          <!-- Page Header -->
           <h1 class="my-2">Acme Web</h1>
           <h2>${currentPgAndCont.name}</h2>
 
@@ -26,7 +31,8 @@ const renderPage = (allPages, currentPgAndCont) => {
                     class="nav-link
                     ${page.id === currentPgAndCont.id ? 'active' : ''}"
                     href="/pages/${page.id}"
-                    >${page.name}</a>
+                    >${page.name}</a
+                  >
                 </li>
               `;
             })}
@@ -43,7 +49,6 @@ const renderPage = (allPages, currentPgAndCont) => {
               `;
             })}
           </ul>
-
         </div>
       </body>
     </html>

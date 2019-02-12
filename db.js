@@ -30,8 +30,8 @@ const initDb = (force = false) => {
 };
 
 // initializes, syncs and seed the db
-const seedAndSyncDB = force => {
-  initDb(force)
+const initSyncAndSeedDb = () => {
+  return initDb(true)
     .then(() => {
       const homePg = Page.create({ name: 'Home' });
       const employPg = Page.create({ name: 'Employees' });
@@ -60,34 +60,59 @@ const seedAndSyncDB = force => {
         contactPg.setContents(contactCnt)
       ])
     })
-    .then(() => {
-      console.log('I have seed the database');
-    })
-    .catch(error => {
-      console.error(error);
-    });
+    .then(() => console.log('I have seed the database'))
+    .catch(error => console.error(error));
 };
 
+// const seedDb = () => {
+//   Promise.all([
+//     Page.create({ name: 'Home' }),
+//     Page.create({ name: 'Employees' }),
+//     Page.create({ name: 'Contact' }),
+//     Promise.all([
+//       Content.create({ head: 'Welcome Home 1', body: 'xoxoxo' }),
+//       Content.create({ head: 'Welcome Home 2', body: 'xoxoxo' }),
+//     ]),
+//     Promise.all([
+//       Content.create({ head: 'MOE', body: 'CEO' }),
+//       Content.create({ head: 'LARRY', body: 'CTO' }),
+//       Content.create({ head: 'CURLY', body: 'COO' }),
+//     ]),
+//     Promise.all([
+//       Content.create({ head: 'Phone', body: '212-555-1212' }),
+//       Content.create({ head: 'Telex', body: '212-555-1213' }),
+//       Content.create({ head: 'FAX', body: '212-555-1214' }),
+//     ]),
+//   ])
+//     .then(([homePg, employPg, contactPg, homeCnt, employCnt, contactCnt]) => {
+//       return Promise.all([
+//         homePg.setContents(homeCnt),
+//         employPg.setContents(employCnt),
+//         contactPg.setContents(contactCnt),
+//       ]);
+//     })
+//     .then(() => console.log('I have seed the database'))
+//     .catch(error => console.error(error));
+// };
 
 const getHomePg = () => {
   return Page.findAll({
-    where: { name: 'Home'}
-  })
-  .then(pages => pages[0]);
-}
+    where: { name: 'Home' },
+  }).then(pages => pages[0]);
+};
 
-const getPageAndContents = (id) => {
-  return Page.findByPk(parseInt(id), {include: [Content]});
-}
+const getPageAndContents = id => {
+  return Page.findByPk(parseInt(id), { include: [Content] });
+};
 
 const getAllPages = () => {
   return Page.findAll();
-}
+};
 
 module.exports = {
   initDb,
-  seedAndSyncDB,
+  initSyncAndSeedDb,
   getHomePg,
   getAllPages,
-  getPageAndContents
-}
+  getPageAndContents,
+};

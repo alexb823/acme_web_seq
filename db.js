@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-//For cloud9 db
+// For cloud9 db
 // const db = new Sequelize('ubuntu', 'postgres', 'password', {
 //   host: 'localhost',
 //   dialect: 'postgres',
@@ -40,7 +40,7 @@ Page.hasMany(Content);
 const syncAndSeed = () => {
   return db.sync({ force: true })
     .then(() => {
-      const homePg = Page.create({ name: 'Home' });
+      const homePg = Page.create({ name: 'Home', isHomePage: true });
       const employPg = Page.create({ name: 'Employees' });
       const contactPg = Page.create({ name: 'Contact' });
 
